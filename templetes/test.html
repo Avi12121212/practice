@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        input:hover{
+        color:red;
+        box-shadow: 2px 3px 5px red;
+        font-size:20px;
+        background-color:white;
+        }
+
+        #id:hover{
+        color: green;
+        font-size:20px;
+        background-color: white;
+        box-shadow: 2px 3px 5px green;
+        }
+
+    </style>
+</head>
+
+<body style="background-color: khaki" >
+<center>
+    test
+    <form action="" method="get" >
+        <input type="hidden" value="{{qno}}" name="qno">
+        <h1>True False Quiz</h1>
+        <h2>{{qnumber}}.. {{question.question}}</h2>
+        <input id="id" type="submit" name="option" value="True">
+        <input type="submit" name="option" value="False">
+
+        <h3>Your previous question {{qno}}'s answer</h3>
+        <h1>Your Option is : {{opt}}</h1>
+        <input type="hidden" name="l" value="{{l}}">
+
+    </form>
+</center>
+</body>
+</html>

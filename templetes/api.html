@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>api call</title>
+</head>
+<body>
+api call <br><br>
+
+{% for key,value in data.items %}
+<br/>
+<a target=" " href="/getdata?value={{value}}">{{key}}</a>
+{% endfor %}
+
+</body>
+</html>
