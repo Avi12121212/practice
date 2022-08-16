@@ -27,6 +27,7 @@ def books(request):
     return render(request, "a.html", {'sum': sum, 'num1': num1, 'num2': num2})
 
 
+# ************************************************************************************************
 def f1(request, sum):
     return render(request, "result.html", {"sum": sum})
 
@@ -37,7 +38,7 @@ def f1(request, sum):
 #         sum = int(request.GET['sum'])
 #     return render(request, "result.html", {'sum': sum})
 
-
+# ************************************************************************************************
 def radio(request):
     sum = 0
     num1 = []
@@ -59,6 +60,7 @@ def radio(request):
     return render(request, "b.html", {'sum': sum, 'num1': num1, 'num2': num2, 'submit': opt})
 
 
+# ************************************************************************************************
 def api(request):
     response = requests.get('https://swapi.dev/api/')
     data = response.json()
@@ -74,6 +76,7 @@ def getdata(request):
     return render(request, "getdata.html", {'link': data})
 
 
+# ************************************************************************************************
 def test(request):
     qno = 0
     opt = ""
@@ -105,7 +108,7 @@ def test(request):
         # print(l1)
         for i in l1:
             if i == '':
-                continue
+                pass
             l.append(int(i))
 
         # l.append(opt)
@@ -134,16 +137,100 @@ def test(request):
     return render(request, "test.html", {"qno": qno, "qnumber": qno + 1, "question": question, "opt": opt, "l": l})
 
 
+# *****************************************************************************************************
 def quiz(request):
     qno = 0
     questions = [{"question": "C is a programming language", "option1": "True", "option2": "False", "option3": "Yes",
-                  "option4": "NO"},
-                 {"question": "Java is not a programming language", "option1": True, "option2": False, "option3": "Yes",
-                  "option4": "NO"},
-                 {"question": "C is not a programming language", "option1": True, "option2": False, "option3": "Yes",
-                  "option4": "NO"}]
-    question = questions[qno]
+                  "option4": "NO", "correct": "4"},
+                 {"question": "Java is not a programming language", "option1": "True", "option2": False,
+                  "option3": "Yes",
+                  "option4": "NO", "correct": "2"},
+                 {"question": "C is not a programming language", "option1": "True", "option2": False, "option3": "Yes",
+                  "option4": "NO", "correct": "1"}]
+
     if request.GET:
-        
+        sub = request.GET["submit"]
+        qno = int(request.GET["qno"])
+        option = request.GET["option"]
+        correctanswer = questions[qno].get("correct")
+        print(option, correctanswer)
+        iscorrect = option == correctanswer
+        print(iscorrect)
+        qno += 1
+        if qno >= len(questions):
+            return render(request, "result.html")
+
     # print(question["option1"])
-    return render(request, "newtest.html", {"question": question, "qnumber": qno + 1})
+    question = questions[qno]
+    return render(request, "newtest.html", {"question": question, "qno": qno, "qnumber": qno + 1})
+
+
+# ********************************************************************************************************
+
+def apiquiz(request):
+    answers = request.session.get("answers")
+    if answers == None:
+        answers = []
+    qno = 0
+    if qno == 0:
+        try:
+            request.session.pop("answers")
+        except:
+            pass
+    # p = ''
+    response = requests.get(
+        'https://gist.githubusercontent.com/champaksworldcreate/320e5af5ea9dbd31597d220637885587/raw/99f8f7a4df34ae477dcceb62598aa0bdde9ef685/tfquestions.json')
+    data = response.json()
+    data = data.get("questions")
+    p = data[qno]["question"]
+    # print(len(data))
+    # print(data)
+    if request.GET:
+        option = int(request.GET["option"])
+        if option == 1:
+            option = "true"
+        else:
+            option = "false"
+
+        correctanswer = data[qno].get("correctanswer")
+        # print(option, correctanswer)
+        iscorrect = option == correctanswer        # this will give us a boolean option
+        answers.append(iscorrect)
+        request.session["answers"] = answers
+        # print((iscorrect))
+        qno = int(request.GET["qno"])
+        qno += 1
+        if qno >= len(data):
+            return render(request, "result.html", {"answer": answers})
+        p = data[qno]["question"]
+
+    # print(p)
+    return render(request, "apitest.html", {"data": p, "qnumber": qno + 1, "qno": qno})
+
+
+def session(request):
+    key = ""
+    value = ""
+    if request.GET:
+        submit = request.GET["submit"]
+        key = request.GET["key"]
+
+        value = request.GET["value"]
+    session = request.session
+    session[key] = value
+    return render(request, "session.html", {"session": session, "key": key, "value": value})
+
+
+def sessionview(request):
+    return render(request, "sessionview.html", {"session": request.session.items()})
+
+
+def sessionremove(request):
+    key = ""
+    if request.POST:
+        key = request.POST["key"]
+        try:
+            request.session.pop(key)
+        except:
+            pass
+    return render(request, "sessionremove.html", {"key": key})

@@ -9,11 +9,12 @@ test type
 <form action="" method="get">
     <div style="background-color: khaki">
         <h2></h2>
+        <input type="hidden" value="{{qno}}" name="qno">
         <h1>{{qnumber}}..{{question.question}}</h1>
-        <input type="radio" name="option" value="">{{question.option1}}<br><br>
-        <input type="radio" name="option" value="">{{question.option2}}<br><br>
-        <input type="radio" name="option" value="">{{question.option3}}<br><br>
-        <input type="radio" name="option" value="">{{question.option4}}<br><br>
+        <input type="radio" name="option" value="1">{{question.option1}}<br><br>
+        <input type="radio" name="option" value="2">{{question.option2}}<br><br>
+        <input type="radio" name="option" value="3">{{question.option3}}<br><br>
+        <input type="radio" name="option" value="4">{{question.option4}}<br><br>
         <input type="submit" name="submit" value="next">
     </div>
 </form>
